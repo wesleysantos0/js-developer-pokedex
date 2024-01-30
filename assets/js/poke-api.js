@@ -1,14 +1,16 @@
+//  Funções de Manipulação HTTP
 
 const pokeApi = {}
+//  Requisição da API
 
 function convertPokeApiDetailToPokemon(pokeDetail) {
     const pokemon = new Pokemon()
     pokemon.number = pokeDetail.id
-    pokemon.name = pokeDetail.name
+    pokemon.name =pokeDetail.name
 
-    const types = pokeDetail.types.map((typeSlot) => typeSlot.type.name)
+   const types = pokeDetail.types.map((typeSlot) => typeSlot.type.name)
     const [type] = types
-
+    
     pokemon.types = types
     pokemon.type = type
 
@@ -26,10 +28,10 @@ pokeApi.getPokemonDetail = (pokemon) => {
 pokeApi.getPokemons = (offset = 0, limit = 5) => {
     const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
 
-    return fetch(url)
-        .then((response) => response.json())
+    return fetch(url) //requisição da lista de Pokemon
+        .then((response) => response.json()) //conversão do http p/ json
         .then((jsonBody) => jsonBody.results)
-        .then((pokemons) => pokemons.map(pokeApi.getPokemonDetail))
+        .then((pokemons) => pokemons.map(pokeApi.getPokemonDetail)) // conversão de uma nova lista de pokemon com mais detalhes
         .then((detailRequests) => Promise.all(detailRequests))
         .then((pokemonsDetails) => pokemonsDetails)
 }
